@@ -14,16 +14,17 @@ export interface TeamData {
 }
 
 export interface FinishedGameData {
-  homeTeam: string,
-  awayTeam: string,
-  homePoints: number,
-  awayPoints: number,
+  homeTeam: string;
+  awayTeam: string;
+  homePoints: number;
+  awayPoints: number;
+  phase: string;
 }
 
 export interface UpcomingGameData {
-  homeTeam: string,
-  awayTeam: string,
-  date: Date,
+  homeTeam: string;
+  awayTeam: string;
+  date: Date;
 }
 
 @Component({
@@ -66,9 +67,9 @@ export class AppComponent implements OnInit {
             ties: team.standing.overallTies,
             losses: team.standing.overallLosses,
             divisionWins: team.standing.divisionWins,
-            dude: dude,
+            dude,
           };
-        })
+        });
       }),
       map((teams: TeamData[]) => this.orderByPoints(teams)),
     );
@@ -93,8 +94,9 @@ export class AppComponent implements OnInit {
             awayTeam: game.gameSchedule.visitorNickname,
             homePoints: game.score.homeTeamScore.pointTotal,
             awayPoints: game.score.visitorTeamScore.pointTotal,
+            phase: game.score.phase,
           };
-        })
+        });
       }),
     );
 
@@ -116,7 +118,7 @@ export class AppComponent implements OnInit {
             awayTeam: game.gameSchedule.visitorNickname,
             date: new Date(game.gameSchedule.isoTime),
           };
-        })
+        });
       }),
     );
   }
@@ -139,7 +141,7 @@ export class AppComponent implements OnInit {
             return 1;
           } else {
             if (a.divisionWins > b.divisionWins) {
-              return -1
+              return -1;
             } else {
               return -1;
             }

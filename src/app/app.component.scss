@@ -89,7 +89,21 @@
                 }
             }
 
+            span {
+                &.phase {
+                    margin-left: 10px;
+                    font-size: 18px;
+                }
+
+                &.live {
+                    color: #3ae03a;
+                    margin-right: 10px;
+                }
+            }
+
             p {
+                display: flex;
+                align-items: center;
                 font-size: 30px;
                 color: white;
                 text-shadow: 1px 1px black;
