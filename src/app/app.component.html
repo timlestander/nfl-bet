@@ -5,7 +5,8 @@
     <div class="col pos">{{ i + 1 }}</div>
     <div class="col dude">{{ team.dude | uppercase }}</div>
     <div class="col name">{{ team.name | uppercase }}</div>
-    <div class="col score">{{ team.wins }}-{{ team.ties }}-{{ team.losses }}</div>
+    <div class="col score" *ngIf="team.ties === 0">{{ team.wins }}-{{ team.losses }}</div>
+    <div class="col score" *ngIf="team.ties > 0">{{ team.wins }}-{{ team.losses }}-{{ team.ties }}</div>
   </div>
 </div>
 
