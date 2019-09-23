@@ -79,8 +79,6 @@ export class AppComponent implements OnInit {
       map((data: any) => {
         const interestingTeams: string[] = Object.values(this.players);
         return data.gameScores.filter(game => {
-          // console.log(game.scores);
-          // return data.gameScores;
           return (interestingTeams.includes(game.gameSchedule.homeNickname) ||
             interestingTeams.includes(game.gameSchedule.visitorNickname)) &&
             game.score !== null;
@@ -88,7 +86,6 @@ export class AppComponent implements OnInit {
       }),
       map((games: any[]) => {
         return games.map(game => {
-          console.log(game.gameSchedule);
           return {
             homeTeam: game.gameSchedule.homeNickname,
             awayTeam: game.gameSchedule.visitorNickname,
@@ -103,7 +100,6 @@ export class AppComponent implements OnInit {
     this.upcomingGames$ = this.apiService.getGames().pipe(
       take(1),
       map((data: any) => {
-        console.log(data);
         const interestingTeams: string[] = Object.values(this.players);
         return data.gameScores.filter(game => {
           return (interestingTeams.includes(game.gameSchedule.homeNickname) ||

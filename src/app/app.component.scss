@@ -40,6 +40,38 @@
                 border-bottom: 1px solid #6c70ce;
             }
 
+            // Clean this up.
+            &:first-of-type {
+                .col {
+                    &.dude, &.name {
+                        position: relative;
+
+                        &::before {
+                            position: absolute;
+                            top: -50px;
+                            content: '';
+                            background-image: url('https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/160/apple/76/crown_1f451.png');
+                            background-size: cover;
+                            width: 55px;
+                            height: 55px;
+                        }
+                    }
+
+                    &.name::before {
+                        display: none;
+                    }
+
+                    @include x-small {
+                        &.name::before {
+                            display: inline-block;
+                            top: -36px;
+                            width: 40px;
+                            height: 40px;
+                        }
+                    }
+                }
+            }
+
             .col {
                 flex: 1;
                 text-overflow: ellipsis;
