@@ -23,7 +23,7 @@
   <div class="section" *ngIf="upcomingGames$ | async as games">
     <h2>Kommande matcher</h2>
     <p *ngFor="let game of games">
-      {{ game.date | date: 'MM/dd, HH:ss'}}: {{ game.homeTeam }} - {{ game.awayTeam }}
+      {{ game.date | date: 'dd/MM, HH:ss'}}: {{ game.homeTeam }} - {{ game.awayTeam }}
     </p>
     <p *ngIf="games.length === 0">Alla intressanta lag har spelat denna omgång.</p>
   </div>
