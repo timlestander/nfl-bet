@@ -48,7 +48,9 @@ export class AppComponent implements OnInit {
     chrisse: 'Titans',
     KFJ: 'Saints',
     Clabbe: 'Vikings',
-    Marbs: 'Rams'
+    Marbs: 'Rams',
+    Filip: 'Chargers',
+    Johan: 'Raiders',
   };
 
   constructor(private apiService: ApiService) { }
