@@ -1,10 +1,10 @@
 <h1>Vuxna män bettar på NFL, ibland.</h1>
 
-<div class="scoreboard" *ngIf="data$ | async as data">
-  <div class="row" *ngFor="let team of data; let i=index">
+<div class="scoreboard" *ngIf="scoreboard$ | async as scoreboard">
+  <div class="row" *ngFor="let team of scoreboard; let i=index">
     <div class="col pos">{{ i + 1 }}</div>
-    <div class="col dude">{{ team.dude | uppercase }}</div>
-    <div class="col name">{{ team.name | uppercase }}</div>
+    <div class="col dude">{{ team.name | uppercase }}</div>
+    <div class="col name">{{ team.team | uppercase }}</div>
     <div class="col score" *ngIf="team.ties === 0">{{ team.wins }}-{{ team.losses }}</div>
     <div class="col score" *ngIf="team.ties > 0">{{ team.wins }}-{{ team.losses }}-{{ team.ties }}</div>
   </div>
@@ -23,7 +23,7 @@
   <div class="section" *ngIf="upcomingGames$ | async as games">
     <h2>Kommande matcher</h2>
     <p *ngFor="let game of games">
-      {{ game.date | date: 'dd/MM, HH:ss'}}: {{ game.homeTeam }} - {{ game.awayTeam }}
+      {{ game.date | date: 'dd/MM, HH:ss'}}: {{ game.awayTeam }} @ {{ game.homeTeam }}
     </p>
     <p *ngIf="games.length === 0">Alla intressanta lag har spelat denna omgång.</p>
   </div>
