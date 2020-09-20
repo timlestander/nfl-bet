@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from './api.service';
-import { map } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
 import { Observable, forkJoin } from 'rxjs';
+import { temporaryAllocator } from '@angular/compiler/src/render3/view/util';
 
 export interface TeamData {
   wins: number;
@@ -11,7 +12,7 @@ export interface TeamData {
   name: string;
 }
 
-export interface FinishedGameData {
+export interface GameData {
   homeTeam: string;
   awayTeam: string;
   homePoints: number;
@@ -19,10 +20,15 @@ export interface FinishedGameData {
   phase: string;
 }
 
-export interface UpcomingGameData {
+export interface GameData {
   homeTeam: string;
+  homeScore: number,
   awayTeam: string;
+  awayScore: number;
   date: Date;
+  active: boolean;
+  completed: boolean;
+  time: string;
 }
 
 @Component({
@@ -35,12 +41,12 @@ export class AppComponent implements OnInit {
   public data$: Observable<TeamData[]>;
   public fullData$: Observable<any>;
 
-  public finishedGames$: Observable<FinishedGameData[]>;
-  public upcomingGames$: Observable<UpcomingGameData[]>;
+  public allGameData$: Observable<GameData[]>;
+  public startedGames$: Observable<GameData[]>;
+  public upcomingGames$: Observable<GameData[]>;
 
   private allTeamData$: Observable<any>;
   public scoreboard$: Observable<TeamData[]>;
-  public mockScoreboard$: Observable<any>;
   public leagueData$: Observable<any>;
 
   public players = [
@@ -53,7 +59,7 @@ export class AppComponent implements OnInit {
     { name: 'Johan', teamId: 13 },
     { name: 'Filip', teamId: 24 },
     { name: 'Ola', teamId: 9 },
-    { name: 'Joel', teamId: 29 },
+    { name: 'Joel', teamId: 29 }
   ];
 
   constructor(private apiService: ApiService) { }
@@ -80,95 +86,34 @@ export class AppComponent implements OnInit {
       map((teamData: TeamData[]) => this.orderByPoints(teamData)),
     );
 
-    this.upcomingGames$ = this.allTeamData$.pipe(
+    this.allGameData$ = this.allTeamData$.pipe(
       map(results => {
         return results.map((res, index) => {
           return {
             homeTeam: res.team.nextEvent[0].competitions[0].competitors[0].team.shortDisplayName,
+            homeScore: res.team.nextEvent[0].competitions[0].competitors[0].score ? res.team.nextEvent[0].competitions[0].competitors[0].score.value : 0,
             awayTeam: res.team.nextEvent[0].competitions[0].competitors[1].team.shortDisplayName,
-            date: res.team.nextEvent[0].date
+            awayScore: res.team.nextEvent[0].competitions[0].competitors[1].score ? res.team.nextEvent[0].competitions[0].competitors[1].score.value : 0,
+            date: res.team.nextEvent[0].date,
+            active: res.team.nextEvent[0].competitions[0].status.type.state === "in",
+            completed: res.team.nextEvent[0].competitions[0].status.type.completed,
+            time: res.team.nextEvent[0].competitions[0].status.type.shortDetail
           }
         })
       }),
-      map((upcomingGameData: UpcomingGameData[]) => upcomingGameData.sort((a, b) => a.date > b.date ? 1 : -1))
-    )
+      map((upcomingGameData: GameData[]) => {
+        return upcomingGameData.reduce((acc, g) => {
+          const exists: boolean = acc.some(game => game.homeTeam === g.homeTeam);
+          if (!exists) {
+            acc.push(g);
+          }
+          return acc;
+        }, []).sort(((a, b) => a.date > b.date ? 1 : -1))
+      }),
+    );
 
-    // this.teamData$ = this.apiService.getTeamData(23).pipe(
-    //   map((data: any) => {
-    //     console.log(data);
-    //     return {
-    //       name: data.team.name,
-    //       wins: data.team.record.items[0].stats[1].value,
-    //       losses: data.team.record.items[0].stats[2].value,
-    //       ties: data.team.record.items[0].stats[5].value,
-    //       divisionWins: data.team.record.items[0].stats[19].value,
-    //       dude: 'Tim'
-    //     };
-    //   })
-    // );
-
-    // this.data$ = this.apiService.getStandings().pipe(
-    //   take(1),
-    //   map((data: any) => data.teamStandings.filter(team => Object.values(this.players).includes(team.team.nick))),
-    //   map((teams: any[]) => {
-    //     return teams.map(team => {
-    //       const dude = Object.keys(this.players).find(player => this.players[player] === team.team.nick);
-    //       return {
-    //         name: team.team.nick,
-    //         wins: team.standing.overallWins,
-    //         ties: team.standing.overallTies,
-    //         losses: team.standing.overallLosses,
-    //         divisionWins: team.standing.divisionWins,
-    //         dude,
-    //       };
-    //     });
-    //   }),
-    //   map((teams: TeamData[]) => this.orderByPoints(teams)),
-    // );
-
-    // this.finishedGames$ = this.apiService.getGames().pipe(
-    //   take(1),
-    //   map((data: any) => {
-    //     const interestingTeams: string[] = Object.values(this.players);
-    //     return data.gameScores.filter(game => {
-    //       return (interestingTeams.includes(game.gameSchedule.homeNickname) ||
-    //         interestingTeams.includes(game.gameSchedule.visitorNickname)) &&
-    //         game.score !== null;
-    //     });
-    //   }),
-    //   map((games: any[]) => {
-    //     return games.map(game => {
-    //       return {
-    //         homeTeam: game.gameSchedule.homeNickname,
-    //         awayTeam: game.gameSchedule.visitorNickname,
-    //         homePoints: game.score.homeTeamScore.pointTotal,
-    //         awayPoints: game.score.visitorTeamScore.pointTotal,
-    //         phase: game.score.phase,
-    //       };
-    //     });
-    //   }),
-    // );
-
-    // this.upcomingGames$ = this.apiService.getGames().pipe(
-    //   take(1),
-    //   map((data: any) => {
-    //     const interestingTeams: string[] = Object.values(this.players);
-    //     return data.gameScores.filter(game => {
-    //       return (interestingTeams.includes(game.gameSchedule.homeNickname) ||
-    //         interestingTeams.includes(game.gameSchedule.visitorNickname)) &&
-    //         game.score === null;
-    //     });
-    //   }),
-    //   map((games: any[]) => {
-    //     return games.map(game => {
-    //       return {
-    //         homeTeam: game.gameSchedule.homeNickname,
-    //         awayTeam: game.gameSchedule.visitorNickname,
-    //         date: new Date(game.gameSchedule.isoTime),
-    //       };
-    //     });
-    //   }),
-    // );
+    this.upcomingGames$ = this.allGameData$.pipe(map(games => games.filter(game => !game.active && !game.completed)))
+    this.startedGames$ = this.allGameData$.pipe(map(games => games.filter(game => game.active || game.completed)))
   }
 
   orderByPoints = (teams: TeamData[]) => {

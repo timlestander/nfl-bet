@@ -11,15 +11,16 @@
 </div>
 
 <div class="game-section">
-  <div class="section" *ngIf="finishedGames$ | async as games">
+  <div class="section" *ngIf="startedGames$ | async as games">
     <h2>Senaste matcherna</h2>
     <p *ngFor="let game of games">
-      <span *ngIf="game.phase !== 'FINAL'" class="live">&#9679;</span>
-      <span>{{ game.homeTeam }} - {{ game.awayTeam }}, {{ game.homePoints }}-{{ game.awayPoints }}</span>
-      <span class="phase">{{ game.phase }}</span>
+      <span *ngIf="game.active" class="live">&#9679;</span>
+      <span>{{ game.awayTeam }} @ {{ game.homeTeam }}, {{ game.awayScore }}-{{ game.homeScore }}</span>
+      <span class="phase">{{ game.time }}</span>
     </p>
     <p *ngIf="games.length === 0">Inga intressanta lag har spelat än i denna omgång.</p>
   </div>
+
   <div class="section" *ngIf="upcomingGames$ | async as games">
     <h2>Kommande matcher</h2>
     <p *ngFor="let game of games">
