@@ -52,7 +52,7 @@ export class AppComponent implements OnInit {
   public players = [
     { name: 'Tim', teamId: 23 },
     { name: 'KF & Joppe', teamId: 18 },
-    { name: 'Martin', teamId: 26 },
+    { name: 'Martin & Danezen', teamId: 26 },
     { name: 'Babben', teamId: 27 },
     { name: 'Clabbe', teamId: 16 },
     { name: 'Chrisse', teamId: 10 },
