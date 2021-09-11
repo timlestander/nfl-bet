@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from './api.service';
-import { filter, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { Observable, forkJoin } from 'rxjs';
-import { temporaryAllocator } from '@angular/compiler/src/render3/view/util';
 
 export interface TeamData {
   wins: number;
@@ -58,7 +57,7 @@ export class AppComponent implements OnInit {
     { name: 'Chrisse', teamId: 10 },
     { name: 'Johan', teamId: 13 },
     { name: 'Filip', teamId: 24 },
-    { name: 'Ola', teamId: 9 },
+    { name: 'Ola & Fegbert', teamId: 9 },
     { name: 'Joel', teamId: 29 }
   ];
 
