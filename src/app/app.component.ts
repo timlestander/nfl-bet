@@ -58,7 +58,8 @@ export class AppComponent implements OnInit {
     { name: 'Johan', teamId: 13 },
     { name: 'Filip', teamId: 24 },
     { name: 'Ola & Fegbert', teamId: 9 },
-    { name: 'Joel', teamId: 29 }
+    { name: 'Joel', teamId: 29 },
+    { name: 'Ogg', teamId: 7 }
   ];
 
   constructor(private apiService: ApiService) { }
