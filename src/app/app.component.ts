@@ -73,12 +73,13 @@ export class AppComponent implements OnInit {
     this.scoreboard$ = this.allTeamData$.pipe(
       map(results => {
         return results.map((res, index) => {
+          const scores = res.team.record.items[0].summary.split("-");
           return {
             name: this.players[index].name,
-            wins: res.team.record.items[0].stats[1].value,
-            losses: res.team.record.items[0].stats[2].value,
-            ties: res.team.record.items[0].stats[5].value,
-            divisionWins: res.team.record.items[0].stats[19].value,
+            wins: scores[0],
+            losses: scores[1],
+            ties: scores.length > 2 ? scores[2] : 0,
+            divisionWins: res.team.record.items[0].stats[21].value,
             team: res.team.shortDisplayName
           };
         })
