@@ -48,12 +48,12 @@
 
                         &::before {
                             position: absolute;
-                            top: -50px;
-                            content: '';
-                            background-image: url('https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/160/apple/76/crown_1f451.png');
+                            top: -32px;
+                            left: -24px;
+                            content: '👑';
                             background-size: cover;
-                            width: 55px;
-                            height: 55px;
+                            font-size: 36px;
+                            transform: rotate(-30deg);
                         }
                     }
 
@@ -141,6 +141,7 @@
                 color: white;
                 text-shadow: 1px 1px black;
                 margin-bottom: 10px;
+                text-align: center;
 
                 @include small {
                     font-size: 20px;

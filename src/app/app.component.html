@@ -18,7 +18,7 @@
       <span>{{ game.awayTeam }} @ {{ game.homeTeam }}, {{ game.awayScore }}-{{ game.homeScore }}</span>
       <span class="phase">{{ game.time }}</span>
     </p>
-    <p *ngIf="games.length === 0">Inga intressanta lag har spelat än i denna omgång.</p>
+    <p class="no-games" *ngIf="games.length === 0">Inga intressanta lag har spelat än i denna omgång.</p>
   </div>
 
   <div class="section" *ngIf="upcomingGames$ | async as games">
